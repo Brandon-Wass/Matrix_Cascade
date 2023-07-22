@@ -4,7 +4,7 @@ import os
 
 
 # Driver modifiers
-os.environ["SDL_AUDIODRIVER"] = "dummy"
+os.environ["SDL_AUDIODRIVER"] = "dummy" # Disables audio driver
 
 # Define the dimensions of the matrix-style face and size of each cell
 CELL_SIZE = 10
@@ -50,7 +50,7 @@ def matrix_cascade():
                 screen.blit(text, (x, y))
         
         pygame.display.update()
-        pygame.time.wait(8) # Pause for 100 milliseconds
+        pygame.time.wait(8) # Pause for 8 milliseconds
         
 # Call the function to display the computer-generated face using cascading characters
 matrix_cascade()
