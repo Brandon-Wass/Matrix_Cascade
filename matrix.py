@@ -5,81 +5,62 @@ import os
 # Driver modifiers
 os.environ["SDL_AUDIODRIVER"] = "dummy" 
 
-# Constants
-CELL_SIZE = 10
-ROWS, COLS = 108, 192
-WIDTH, HEIGHT = CELL_SIZE * COLS, CELL_SIZE * ROWS
-chars = [chr(i) for i in range(32, 127)]  # This will use the entire English keyboard
-
-# Initialize Pygame
+# Initialize pygame
 pygame.init()
+
+# Colors
+BLACK = (0, 0, 0)
+GREEN = (0, 255, 0)
+
+# Screen dimensions
+SCREEN_WIDTH = pygame.display.Info().current_w
+SCREEN_HEIGHT = pygame.display.Info().current_h
+FONT_SIZE = 20
+
+# Set up the display
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.FULLSCREEN)
 pygame.display.set_caption("Matrix Cascade")
-screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.NOFRAME | pygame.HWSURFACE | pygame.DOUBLEBUF)
-font = pygame.font.SysFont('Courier', CELL_SIZE, bold=True)
 
-layers = [
-    (0, 255, 0, 3),  # Brightest and Fastest
-    (0, 230, 0, 2.5),
-    (0, 205, 0, 2),
-    (0, 180, 0, 1.5)  # Dimmest and Slowest
-]
+# Font settings
+font = pygame.font.SysFont("Courier New", FONT_SIZE, bold=True)
 
-
-class Drop:
-    def __init__(self, x, color, speed):
+class Column:
+    def __init__(self, x, y):
         self.x = x
-        self.y = random.randint(-30, -1) * CELL_SIZE
-        self.speed = speed
-        self.color = color
-        self.char = random.choice(chars)
+        self.y = y
+        self.chars = [random.choice(" 0123456789 ABCDEFGHIJKLMNOPQRSTUVWXYZ ") for _ in range(random.randint(SCREEN_HEIGHT // FONT_SIZE, 2 * (SCREEN_HEIGHT // FONT_SIZE)))]
+        self.offset = random.randint(0, len(self.chars))
+
+    def draw(self, screen):
+        for index, char in enumerate(self.chars):
+            y_pos = (self.y + index - self.offset) % len(self.chars)
+            screen.blit(font.render(char, True, GREEN), (self.x, y_pos * FONT_SIZE))
+
+    def update(self):
+        self.offset = (self.offset + 1) % len(self.chars)
+
+# Create columns to fill the screen width
+columns = [Column(x, random.randint(0, SCREEN_HEIGHT // FONT_SIZE)) for x in range(0, SCREEN_WIDTH, FONT_SIZE)]
+
+# Clock for controlling FPS
+clock = pygame.time.Clock()
+
+# Main loop
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
+            running = False
+
+    screen.fill(BLACK)
+
+    for column in columns:
+        column.draw(screen)
+        column.update()
+
+    pygame.display.flip()
     
-    def update(self):
-        self.y += self.speed
-        if self.y > HEIGHT:
-            self.y = random.randint(-30, -1) * CELL_SIZE
-            self.char = random.choice(chars)
+    # Cap the FPS at 60
+    clock.tick(10)
 
-    def show(self, screen):
-        text = font.render(self.char, True, self.color)
-        screen.blit(text, (self.x, self.y))
-
-class Stream:
-    def __init__(self, x, color):
-        self.drops = []
-        drop_count = random.randint(1, 10)
-        speed = random.uniform(1, 4)
-        for _ in range(drop_count):
-            self.drops.append(Drop(x, color, speed))
-            x += CELL_SIZE
-
-    def update(self):
-        for drop in self.drops:
-            drop.update()
-
-    def show(self, screen):
-        for drop in self.drops:
-            drop.show(screen)
-
-streams = []
-for i in range(COLS):
-    color_layer = random.choice(layers)
-    _, color, _, _ = color_layer
-    streams.append(Stream(i * CELL_SIZE, (0, color, 0)))
-
-def matrix_cascade():
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                quit()
-
-        screen.fill((0, 0, 0))
-
-        for stream in streams:
-            stream.update()
-            stream.show(screen)
-
-        pygame.display.update()
-        pygame.time.wait(1 // 60)
-
-matrix_cascade()
+pygame.quit()
