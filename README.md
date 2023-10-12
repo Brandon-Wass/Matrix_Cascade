@@ -14,7 +14,7 @@
 
   > Simply clone this repository, navigate to the directory and run:
 
-    >>python matrix_cascade.py
+    >>python matrix.py
 
 ##Features
 
