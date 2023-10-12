@@ -8,15 +8,11 @@
 
     >>You need to have pygame installed to run this animation. You can install it using pip:
 
-      >>>bash
-
       >>>pip install pygame
 
 ##Running the Program
 
   > Simply clone this repository, navigate to the directory and run:
-
-    >>bash
 
     >>python matrix_cascade.py
 
