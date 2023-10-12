@@ -2,7 +2,7 @@
 
   > A simple Pygame based recreation of the iconic digital rain animation from the movie "The Matrix". Watch as the green characters cascade down the screen in random sequences and varying shades of green.
 
-##Getting Started
+## Getting Started
 
   > Prerequisites
 
@@ -10,13 +10,13 @@
 
       >>>pip install pygame
 
-##Running the Program
+## Running the Program
 
   > Simply clone this repository, navigate to the directory and run:
 
     >>python matrix.py
 
-##Features
+## Features
 
   > Cascading random characters inspired by the English keyboard.
 
@@ -26,7 +26,7 @@
 
   > Dynamic drop generation and management for smooth animation.
 
-##How it works
+## How it works
 
   > Drop: The core component that defines the character, its speed, color and position.
 
@@ -36,7 +36,7 @@
 
   > Main Loop: The main loop (matrix_cascade()) that drives the animation. It handles screen updates and user inputs.
 
-##Customizing
+## Customizing
 
   > You can modify the constants at the beginning of the script to adjust the look and feel of the cascade:
 
@@ -46,10 +46,10 @@
 
     >>chars: A list of characters that the cascade can use. By default, it uses characters from the English keyboard.
 
-##License
+## License
 
   > This project is open source and available under the MIT License.
 
-##Acknowledgments
+## Acknowledgments
 
   > Inspired by the iconic digital rain sequence from the movie "The Matrix".
